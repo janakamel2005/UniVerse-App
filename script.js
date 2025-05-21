@@ -246,6 +246,25 @@ function toggleSidebar() {
   document.body.classList.toggle("collapsed");
 }
 
+function showSection(section) {
+  document.getElementById("homeSection").style.display = "none";
+  document.getElementById("dashboardSection").style.display = "none";
+
+  if (section === "dashboard") {
+    document.getElementById("dashboardSection").style.display = "block";
+  } else if (section === "home") {
+    document.getElementById("homeSection").style.display = "block";
+  }
+}
+
+function showDashboardTab(tab) {
+  const tabs = ["notesSection", "deadlinesSection", "resourcesSection", "importantSection"];
+  
+  tabs.forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+
+  document.getElementById(tab + "Section").style.display = "block";
 }
 
 
