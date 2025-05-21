@@ -1,171 +1,143 @@
-// Request notification permission
-if ("Notification" in window && Notification.permission !== "granted") {
-  Notification.requestPermission();
-}
+< !DOCTYPE html >
+  <html lang="en">
 
-// SAVE NOTE + localStorage
-function saveNote() {
-  const input = document.getElementById("noteInput");
-  const text = input.value.trim();
+    <head>
+      <meta charset="UTF-8">
+        <title>UniVerse – Your Student Companion</title>
+        <link rel="stylesheet" href="style.css" />
+        <style>
+    /* (CSS unchanged for brevity — keep your original styles) */
+        </style>
+    </head>
 
-  if (text !== "") {
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
-    notes.push(text);
-    localStorage.setItem("notes", JSON.stringify(notes));
-    input.value = "";
-    renderNotes();
-  }
-}
+    <body>
+      <!-- SIDEBAR -->
+      <div id="sidebar">
+        <button id="toggleSidebar" onclick="toggleSidebar()">☰</button>
+        <div id="sidebarContent">
+          <button onclick="showSection('dashboard'); showDashboardTab('notes')">📝 Notes</button>
+          <button onclick="showSection('dashboard'); showDashboardTab('deadlines')">⏰ Deadlines</button>
+          <button onclick="showSection('dashboard'); showDashboardTab('resources')">🌐 Resources</button>
+          <button onclick="showSection('dashboard'); showDashboardTab('important')">🔒 Important Info</button>
+          <button onclick="showSection('home')">🏠 Home</button>
+        </div>
+      </div>
 
-function renderNotes() {
-  const list = document.getElementById("noteList");
-  list.innerHTML = "";
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <img src="images/universe-logo.png" alt="UniVerse Logo" class="app-logo-large">
+      </header>
 
-  let notes = JSON.parse(localStorage.getItem("notes")) || [];
-  notes.forEach((note, index) => {
-    const li = document.createElement("li");
-    li.textContent = note;
+      <!-- MAIN CONTENT -->
+      <div id="mainContent">
+        <!-- HOME SECTION -->
+        <section id="homeSection" class="homepage">
+          <div class="welcome" style="text-align: center;">
+            <h2>Welcome to UniVerse 🌍</h2>
+            <p>Your companion for surviving and thriving as an international student.</p>
+          </div>
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "🗑";
-    deleteBtn.style.marginLeft = "10px";
-    deleteBtn.onclick = () => {
-      notes.splice(index, 1);
-      localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
-    };
+          <!-- Slideshow -->
+          <div class="slideshow-container">
+            <div class="slide fade"><img src="images/students1.jpg" alt="Berlin city life" /></div>
+            <div class="slide fade"><img src="images/students2.jpg" alt="Students working together" /></div>
+            <div class="slide fade"><img src="images/students3.jpg" alt="TU Berlin library" /></div>
+          </div>
 
-    li.appendChild(deleteBtn);
-    list.appendChild(li);
-  });
-}
+          <!-- What is Universe -->
+          <section class="highlight-box">
+            <h3>🌟 What is UniVerse?</h3>
+            <p>UniVerse is your personal student sidekick — designed to help you keep track of everything from important deadlines and personal documents to helpful resources and housing links.</p>
+          </section>
 
-function addDeadline(event) {
-  event.preventDefault();
-  const title = document.getElementById("deadlineTitle").value;
-  const date = document.getElementById("deadlineDate").value;
+          <!-- Video -->
+          <div class="video-wrapper" style="text-align: center;">
+            <video width="100%" controls style="max-width: 600px; border-radius: 10px;">
+              <source src="welcome-video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+          </div>
 
-  if (title && date) {
-    const deadline = { title, date };
-    let deadlines = JSON.parse(localStorage.getItem("deadlines")) || [];
-    deadlines.push(deadline);
-    localStorage.setItem("deadlines", JSON.stringify(deadlines));
-    renderDeadlines();
-    document.getElementById("deadlineTitle").value = "";
-    document.getElementById("deadlineDate").value = "";
-  }
-}
+          <!-- About the Developer -->
+          <section class="highlight-box" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+            <img src="images/jana-profile.jpg" alt="Jana profile" style="width: 120px; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
+            <div style="flex: 1;">
+              <h3>👩‍💻 About the Developer</h3>
+              <p>Hi, I’m Jana — a Computer Engineering student at TU Berlin with a passion for technology and helping others.</p>
+            </div>
+          </section>
 
-function displayDeadline(deadline, index) {
-  const list = document.getElementById("deadlineList");
-  const li = document.createElement("li");
+          <!-- Features -->
+          <section class="highlight-box">
+            <h3>🧭 What You Can Do</h3>
+            <ul>
+              <li>📝 Save quick notes instantly</li>
+              <li>⏰ Track deadlines with 7- and 2-day reminders</li>
+              <li>🔒 Store your Sozialversicherungsnummer, TK ID, etc.</li>
+              <li>📎 Upload and view important PDFs like visa papers and CVs</li>
+              <li>🌐 Access student-friendly links for housing, jobs, and more</li>
+            </ul>
+          </section>
+        </section>
 
-  const daysLeft = Math.ceil((new Date(deadline.date) - new Date()) / (1000 * 60 * 60 * 24));
-  li.textContent = `${deadline.title} – ${deadline.date} (${daysLeft} days left)`;
+        <!-- DASHBOARD SECTION (moved outside homeSection) -->
+        <section id="dashboardSection" style="display: none;">
+          <div id="notesSection" class="tabContent">
+            <h2>Quick Notes</h2>
+            <input id="noteInput" placeholder="Write a note..." />
+            <button onclick="saveNote()">Save</button>
+            <ul id="noteList"></ul>
+          </div>
 
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "🗑";
-  deleteBtn.style.marginLeft = "10px";
-  deleteBtn.onclick = () => {
-    let deadlines = JSON.parse(localStorage.getItem("deadlines")) || [];
-    deadlines.splice(index, 1);
-    localStorage.setItem("deadlines", JSON.stringify(deadlines));
-    renderDeadlines();
-  };
+          <div id="deadlinesSection" class="tabContent" style="display: none;">
+            <h2>Deadlines</h2>
+            <form onsubmit="addDeadline(event)">
+              <input id="deadlineTitle" placeholder="Title" />
+              <input type="date" id="deadlineDate" />
+              <button type="submit">Add</button>
+            </form>
+            <ul id="deadlineList"></ul>
+          </div>
 
-  li.appendChild(deleteBtn);
-  list.appendChild(li);
+          <div id="resourcesSection" class="tabContent" style="display: none;">
+            <h2>Helpful Links</h2>
+            <ul>
+              <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
+              <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
+            </ul>
+          </div>
 
-  if (Notification.permission === "granted") {
-    if (daysLeft === 7) {
-      new Notification("⏳ 1 week left!", {
-        body: `Your deadline for "${deadline.title}" is in 7 days.`,
-      });
-    } else if (daysLeft === 2) {
-      new Notification("⚠️ 2 days left!", {
-        body: `Don't forget: "${deadline.title}" is in 2 days.`,
-      });
+          <div id="importantSection" class="tabContent" style="display: none;">
+            <h2>Important Info</h2>
+            <form onsubmit="saveImportantInfo(event)">
+              <input id="tkId" placeholder="TK ID" />
+              <input id="socialId" placeholder="Sozialversicherungsnummer" />
+              <input id="otherInfo" placeholder="Other Info" />
+              <button type="submit">Save</button>
+            </form>
+            <div id="importantPreview"></div>
+          </div>
+        </section>
+      </div>
+
+      <script>
+        let slideIndex = 0;
+        function showSlides() {
+          let slides = document.getElementsByClassName("slide");
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+      }
+        slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1; }
+        slides[slideIndex - 1].style.display = "block";
+        setTimeout(showSlides, 3500);
     }
-  }
-}
+        showSlides();
 
-function renderDeadlines() {
-  const list = document.getElementById("deadlineList");
-  list.innerHTML = "";
-
-  let deadlines = JSON.parse(localStorage.getItem("deadlines")) || [];
-  deadlines.forEach((deadline, index) => {
-    displayDeadline(deadline, index);
-  });
-}
-
-function toggleSidebar() {
-  document.body.classList.toggle("collapsed");
-}
-
-function showSection(section) {
-  // Hide all sections first
-  document.getElementById("homeSection").style.display = "none";
-  document.getElementById("dashboardSection").style.display = "none";
-
-  // Show the selected section
-  if (section === "dashboard") {
-    document.getElementById("dashboardSection").style.display = "block";
-  } else if (section === "home") {
-    document.getElementById("homeSection").style.display = "block";
-  }
-}
-
-function showDashboardTab(tab) {
-  // Hide all tab content
-  const tabs = ["notesSection", "deadlinesSection", "resourcesSection", "importantSection"];
-  tabs.forEach(id => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.style.display = "none";
+        function toggleSidebar() {
+          document.body.classList.toggle("collapsed");
     }
-  });
+      </script>
+    </body>
 
-  // Show selected tab
-  const selectedTab = document.getElementById(tab + "Section");
-  if (selectedTab) {
-    selectedTab.style.display = "block";
-  }
-}
-
-function saveImportantInfo(event) {
-  event.preventDefault();
-
-  const tkId = document.getElementById("tkId").value.trim();
-  const socialId = document.getElementById("socialId").value.trim();
-  const other = document.getElementById("otherInfo").value.trim();
-
-  const info = { tkId, socialId, other };
-  localStorage.setItem("importantInfo", JSON.stringify(info));
-
-  showImportantInfo();
-}
-
-function showImportantInfo() {
-  const preview = document.getElementById("importantPreview");
-  const info = JSON.parse(localStorage.getItem("importantInfo"));
-
-  if (info) {
-    preview.innerHTML = `
-      <strong>Saved Info:</strong><br>
-      TK ID: ${info.tkId || "-"}<br>
-      Sozialversicherungsnummer: ${info.socialId || "-"}<br>
-      Other: ${info.other || "-"}
-    `;
-  } else {
-    preview.innerHTML = "<em>No info saved yet.</em>";
-  }
-}
-
-// Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-  renderDeadlines();
-  renderNotes();
-  showImportantInfo();
-  showSection('home'); // Start with home section
-});
+  </html>
