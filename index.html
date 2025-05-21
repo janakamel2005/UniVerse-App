@@ -1,16 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta charset="UTF-8">
+  <title>UniVerse – Your Student Companion</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  Hello world
-  <script src="script.js"></script>
+
+  <header>
+    <h1>🌍 UniVerse</h1>
+
+    <!-- HOME BUTTON (hidden by default) -->
+    <div id="homeBtn" style="display: none;">
+      <button onclick="showSection('home')">🏠 Home</button>
+    </div>
+
+    <!-- DASHBOARD NAVIGATION BUTTONS -->
+    <nav id="dashboardNav" style="display: none;">
+      <button onclick="showDashboardTab('notes')">Quick Notes</button>
+      <button onclick="showDashboardTab('deadlines')">Deadlines</button>
+      <button onclick="showDashboardTab('resources')">Resources</button>
+    </nav>
+
+  </header>
+
+
+  <main>
+
+    <section id="homeSection">
+      <h2>Welcome to UniVerse 🌍</h2>
+      <p>Your companion for surviving and thriving as an international student.</p>
+      <button onclick="showSection('dashboard')">Enter Dashboard</button>
+    </section>
+
+    <section id="dashboardSection" style="display: none;">
+
+    </section>
+
+
+    <!-- NOTES SECTION -->
+    <section id="notesSection">
+      <h2>Quick Notes</h2>
+      <input type="text" id="noteInput" placeholder="Write a note..." />
+      <button onclick="saveNote()">Save</button>
+      <ul id="noteList"></ul>
+    </section>
+
+    <!-- DEADLINES SECTION -->
+    <section id="deadlinesSection" style="display: none;">
+      <h2>Deadline Tracker</h2>
+
+      <form onsubmit="addDeadline(event)">
+        <input type="text" id="deadlineTitle" placeholder="e.g. Visa appointment" required />
+        <input type="date" id="deadlineDate" required />
+        <button type="submit">Add Deadline</button>
+      </form>
+
+      <ul id="deadlineList"></ul>
+    </section>
+
+    <!-- RESOURCES SECTION -->
+    <section id="resourcesSection" style="display: none;">
+      <h2>Helpful Resources</h2>
+
+      <div class="category">
+        <h3>🛂 Legal Documents</h3>
+        <ul>
+          <li><a href="https://service.berlin.de/terminvereinbarung/" target="_blank">Book Visa Appointments –
+              Berlin</a></li>
+          <li>Tip: Book at 8:00am when new slots appear!</li>
+        </ul>
+      </div>
+
+      <div class="category">
+        <h3>🏠 Apartment Hunt</h3>
+        <ul>
+          <li><a href="https://www.wg-gesucht.de/" target="_blank">WG-Gesucht_
+        </ul>
+      </div>
+    </section> <!-- ✅ Closing the resources section -->
+
+  </main> <!-- ✅ Closing the main tag -->
+
+  <script src="script.js"></script> <!-- ✅ Loads your JavaScript! -->
 </body>
 
-</html>
+</html> <!-- ✅ Properly closes the HTML document -->

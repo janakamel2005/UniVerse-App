@@ -1,4 +1,47 @@
-html {
-  height: 100%;
-  width: 100%;
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f4f4f4;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav button {
+  margin: 5px;
+  padding: 10px 15px;
+  background-color: #005eff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input {
+  padding: 8px;
+  width: 200px;
+}
+
+ul {
+  margin-top: 15px;
+  list-style-type: disc;
+}
+.category {
+  background-color: white;
+  padding: 15px;
+  margin-top: 20px;
+  border-left: 5px solid #007bff;
+  border-radius: 5px;
+}
+.category h3 {
+  margin-top: 0;
+}
+.category ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+.category li {
+  margin-bottom: 8px;
 }
