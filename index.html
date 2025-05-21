@@ -229,41 +229,41 @@
 
       <section id="dashboardSection" style="display: none;">
         <div id="notesSection" class="tabContent">
-        <h2>Quick Notes</h2>
-        <input id="noteInput" placeholder="Write a note..." />
-        <button onclick="saveNote()">Save</button>
-        <ul id="noteList"></ul>
-      </div>
+          <h2>Quick Notes</h2>
+          <input id="noteInput" placeholder="Write a note..." />
+          <button onclick="saveNote()">Save</button>
+          <ul id="noteList"></ul>
+        </div>
 
-      <div id="deadlinesSection" class="tabContent" style="display: none;">
-        <h2>Deadlines</h2>
-        <form onsubmit="addDeadline(event)">
-          <input id="deadlineTitle" placeholder="Title" />
-          <input type="date" id="deadlineDate" />
-          <button type="submit">Add</button>
-        </form>
-        <ul id="deadlineList"></ul>
-      </div>
+        <div id="deadlinesSection" class="tabContent" style="display: none;">
+          <h2>Deadlines</h2>
+          <form onsubmit="addDeadline(event)">
+            <input id="deadlineTitle" placeholder="Title" />
+            <input type="date" id="deadlineDate" />
+            <button type="submit">Add</button>
+          </form>
+          <ul id="deadlineList"></ul>
+        </div>
 
-      <div id="resourcesSection" class="tabContent" style="display: none;">
-        <h2>Helpful Links</h2>
-        <ul>
-          <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
-          <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
-        </ul>
-      </div>
+        <div id="resourcesSection" class="tabContent" style="display: none;">
+          <h2>Helpful Links</h2>
+          <ul>
+            <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
+            <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
+          </ul>
+        </div>
 
-      <div id="importantSection" class="tabContent" style="display: none;">
-        <h2>Important Info</h2>
-        <form onsubmit="saveImportantInfo(event)">
-          <input id="tkId" placeholder="TK ID" />
-          <input id="socialId" placeholder="Sozialversicherungsnummer" />
-          <input id="otherInfo" placeholder="Other Info" />
-          <button type="submit">Save</button>
-        </form>
-        <div id="importantPreview"></div>
-      </div>
-    </section>
+        <div id="importantSection" class="tabContent" style="display: none;">
+          <h2>Important Info</h2>
+          <form onsubmit="saveImportantInfo(event)">
+            <input id="tkId" placeholder="TK ID" />
+            <input id="socialId" placeholder="Sozialversicherungsnummer" />
+            <input id="otherInfo" placeholder="Other Info" />
+            <button type="submit">Save</button>
+          </form>
+          <div id="importantPreview"></div>
+        </div>
+      </section>
 
       <!-- Slideshow -->
       <div class="slideshow-container">
