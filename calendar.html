@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVerse Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      padding: 1rem;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      margin: 1rem auto;
+      width: 90%;
+      max-width: 800px;
+      background-color: #ccc;
+    }
+
+    .day-name,
+    .calendar-cell {
+      background: #fff;
+      padding: 1rem;
+      min-height: 80px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .day-name {
+      background: #ecf0f1;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .event {
+      margin-top: 5px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      color: #fff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 320px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal input,
+    .modal select {
+      margin: 5px 0;
+      width: 90%;
+      padding: 5px;
+    }
+
+    .close {
+      float: right;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button {
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .event-list {
+      text-align: left;
+      margin-bottom: 1em;
+    }
+
+    .event-item {
+      margin: 5px 0;
+      padding: 5px;
+      background-color: #ecf0f1;
+      border-left: 5px solid;
+    }
+
+    .event-item span {
+      display: block;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Full Calendar View</h1>
+
+  <div class="calendar-header">
+    <button onclick="changeMonth(-1)">← Prev</button>
+    <h2 id="monthYear">Month Year</h2>
+    <button onclick="changeMonth(1)">Next →</button>
+  </div>
+
+  <div class="calendar-grid" id="calendarGrid">
+    <div class="day-name">Sun</div>
+    <div class="day-name">Mon</div>
+    <div class="day-name">Tue</div>
+    <div class="day-name">Wed</div>
+    <div class="day-name">Thu</div>
+    <div class="day-name">Fri</div>
+    <div class="day-name">Sat</div>
+  </div>
+
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <h3 id="modalDateHeading">Add Event</h3>
+
+      <div class="event-list" id="eventList"></div>
+
+      <input type="text" id="eventTitle" placeholder="Event title" />
+      <input type="time" id="eventTime" />
+      <input type="text" id="eventLocation" placeholder="Location" />
+      <select id="eventColor">
+        <option value="#3498db">Blue</option>
+        <option value="#e74c3c">Red</option>
+        <option value="#2ecc71">Green</option>
+        <option value="#f1c40f">Yellow</option>
+      </select>
+      <br />
+      <button onclick="saveEvent()">Save</button>
+    </div>
+  </div>
+
+  <script>
+    let currentDate = new Date();
+    let selectedDate = null;
+
+    // Always re-load from storage (this prevents overwriting)
+    function loadEvents() {
+      const stored = localStorage.getItem("calendarEvents");
+      return stored ? JSON.parse(stored) : {};
+    }
+
+    let events = loadEvents();
+
+    function renderCalendar() {
+      events = loadEvents(); // Ensure latest data
+      const grid = document.getElementById("calendarGrid");
+      while (grid.children.length > 7) {
+        grid.removeChild(grid.lastChild);
+      }
+
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      document.getElementById("monthYear").textContent = currentDate.toLocaleDateString('default', {month: 'long', year: 'numeric'});
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "calendar-cell";
+        grid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = `${year}-${month + 1}-${day}`;
+        const cell = document.createElement("div");
+        cell.className = "calendar-cell";
+        cell.onclick = () => openModal(dateKey);
+
+        const dateText = document.createElement("strong");
+        dateText.textContent = day;
+        cell.appendChild(dateText);
+
+        if (events[dateKey]) {
+          events[dateKey].forEach(event => {
+            const eventDiv = document.createElement("div");
+            eventDiv.className = "event";
+            eventDiv.style.backgroundColor = event.color;
+            eventDiv.textContent = `${event.time} - ${event.title}`;
+            cell.appendChild(eventDiv);
+          });
+        }
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function changeMonth(offset) {
+      currentDate.setMonth(currentDate.getMonth() + offset);
+      renderCalendar();
+    }
+
+    function openModal(dateKey) {
+      selectedDate = dateKey;
+      events = loadEvents(); // Get fresh data
+      const eventList = document.getElementById("eventList");
+      eventList.innerHTML = "";
+
+      document.getElementById("modalDateHeading").textContent = `Events on ${selectedDate}`;
+      document.getElementById("eventTitle").value = "";
+      document.getElementById("eventTime").value = "";
+      document.getElementById("eventLocation").value = "";
+      document.getElementById("eventColor").value = "#3498db";
+
+      if (events[dateKey]) {
+        events[dateKey].forEach(event => {
+          const item = document.createElement("div");
+          item.className = "event-item";
+          item.style.borderColor = event.color;
+          item.innerHTML = `<strong>${event.time} - ${event.title}</strong><span>${event.location}</span>`;
+          eventList.appendChild(item);
+        });
+      }
+
+      document.getElementById("eventModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("eventModal").style.display = "none";
+    }
+
+    function saveEvent() {
+      const title = document.getElementById("eventTitle").value;
+      const time = document.getElementById("eventTime").value;
+      const location = document.getElementById("eventLocation").value;
+      const color = document.getElementById("eventColor").value;
+
+      if (!title || !time) return alert("Please enter title and time.");
+
+      events = loadEvents(); // Refresh before save
+      if (!events[selectedDate]) events[selectedDate] = [];
+      events[selectedDate].push({title, time, location, color});
+
+      localStorage.setItem("calendarEvents", JSON.stringify(events));
+      closeModal();
+      renderCalendar();
+    }
+
+    window.onclick = (e) => {
+      if (e.target === document.getElementById("eventModal")) closeModal();
+    };
+
+    renderCalendar();
+  </script>
+
+</body>
+
+</html>

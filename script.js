@@ -196,3 +196,43 @@ document.addEventListener('DOMContentLoaded', () => {
   showImportantInfo();
   showDashboardTab('notes'); // Show notes tab by default
 });
+
+function openModal(dateStr) {
+  const modal = document.getElementById("eventModal");
+  const modalDate = document.getElementById("modalDate");
+  const eventList = document.getElementById("modalEventList");
+
+  modalDate.textContent = dateStr;
+  eventList.innerHTML = "";
+
+  const allEvents = JSON.parse(localStorage.getItem("calendarEvents")) || [];
+  const eventsForDate = allEvents.filter(e => e.date === dateStr);
+
+  if (eventsForDate.length === 0) {
+    eventList.innerHTML = "<li>No events</li>";
+  } else {
+    eventsForDate.forEach((event, idx) => {
+      const li = document.createElement("li");
+      li.textContent = `${event.title} — ${event.category}`;
+      li.setAttribute("data-category", event.category);
+
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = "&times;";
+      delBtn.onclick = () => {
+        allEvents.splice(allEvents.indexOf(event), 1);
+        localStorage.setItem("calendarEvents", JSON.stringify(allEvents));
+        renderCalendar();
+        openModal(dateStr); // Refresh modal
+      };
+
+      li.appendChild(delBtn);
+      eventList.appendChild(li);
+    });
+  }
+
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("eventModal").classList.add("hidden");
+}

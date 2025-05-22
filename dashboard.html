@@ -2,196 +2,298 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>UniVerse Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVerse – Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      background-color: #f8f9fb;
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #d2eaf2, #ffffff);
+      color: #222;
     }
 
     .topbar {
-      background-color: #f4f7fc;
-      padding: 20px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid #ddd;
+      padding: 20px 40px;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
-    .app-logo-large {
+    .topbar img {
       height: 50px;
     }
 
-    .app-title {
+    .topbar h1 {
       font-size: 24px;
-      font-weight: 600;
-      color: #2a2a2a;
+      color: #3f51b5;
+      margin: 0;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .dashboard-row {
+    .dashboard {
       display: flex;
       flex-wrap: wrap;
-      gap: 30px;
       justify-content: center;
-      margin-bottom: 30px;
+      gap: 24px;
+      padding: 40px 20px;
     }
 
-    .dashboard-card {
-      flex: 1 1 45%;
-      min-width: 300px;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-      padding: 20px 25px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      cursor: pointer;
+    .widget {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+      width: 300px;
+      padding: 24px;
+      text-align: center;
       transition: transform 0.2s ease;
+      cursor: pointer;
     }
 
-    .dashboard-card:hover {
+    .widget:hover {
       transform: translateY(-4px);
     }
 
-    .card-icon {
-      font-size: 34px;
+    .widget img {
+      height: 50px;
+      margin-bottom: 10px;
     }
 
-    .card-content h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
-      color: #1f1f1f;
+    .widget h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
     }
 
-    .card-content p {
-      margin: 0;
+    .widget p {
       font-size: 14px;
       color: #666;
     }
 
-    .tabContent {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 30px;
-      padding: 20px;
-      display: none;
+    .calendar-preview ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 12px;
+      text-align: left;
     }
 
-    .tabContent h2 {
-      margin-bottom: 15px;
+    .calendar-preview li {
+      font-size: 14px;
+      color: #333;
+      padding: 4px 0;
     }
 
-    input[type="text"],
-    input[type="date"] {
-      padding: 10px;
-      width: 100%;
+    @media (max-width: 768px) {
+      .dashboard {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .mini-calendar {
+      padding: 16px;
+      background: white;
+      border-radius: 16px;
+      font-size: 14px;
+      color: #222;
+    }
+
+    .calendar-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
       margin-bottom: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
     }
 
-    button {
-      padding: 10px 18px;
-      background-color: #3f51b5;
-      color: white;
-      border: none;
-      border-radius: 6px;
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendar-grid div {
+      text-align: center;
+      padding: 6px 0;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .calendar-grid .day-name {
+      font-weight: bold;
+      background: #f2f2f2;
+    }
+
+    .calendar-grid .day-cell {
       cursor: pointer;
-      margin-top: 5px;
     }
 
-    ul {
-      padding-left: 20px;
+    .calendar-grid .day-cell.today {
+      background: #3f51b5;
+      color: white;
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <img src="images/universe-logo.png" alt="UniVerse Logo" class="app-logo-large">
-    <h1 class="app-title">Welcome, Jana!</h1>
-  </header>
+  <div class="dashboard">
+    <!-- Mini Calendar -->
+    <div class="widget calendar-widget" onclick="location.href='calendar.html'">
+      <div class="mini-calendar">
+        <div class="calendar-nav">
+          <button onclick="event.stopPropagation(); changeMiniMonth(-1)">←</button>
+          <span id="miniMonthYear"></span>
+          <button onclick="event.stopPropagation(); changeMiniMonth(1)">→</button>
+        </div>
+        <div class="calendar-grid" id="miniCalendarGrid"></div>
+      </div>
+    </div>
 
-  <div class="container">
-    <main class="dashboard-row">
-      <div class="dashboard-card" onclick="showDashboardTab('notes')">
-        <div class="card-icon">✅</div>
-        <div class="card-content">
-          <h3>To Do List</h3>
-          <p>Write and save tasks instantly</p>
-        </div>
-      </div>
-      <div class="dashboard-card" onclick="showDashboardTab('deadlines')">
-        <div class="card-icon">📅</div>
-        <div class="card-content">
-          <h3>Deadlines</h3>
-          <p>Track important due dates</p>
-        </div>
-      </div>
-      <div class="dashboard-card" onclick="showDashboardTab('important')">
-        <div class="card-icon">📌</div>
-        <div class="card-content">
-          <h3>Important Info</h3>
-          <p>Save key numbers and IDs</p>
-        </div>
-      </div>
-      <div class="dashboard-card" onclick="showDashboardTab('resources')">
-        <div class="card-icon">🌐</div>
-        <div class="card-content">
-          <h3>Resources</h3>
-          <p>Find helpful student links</p>
-        </div>
-      </div>
-    </main>
+    <!-- To-Do -->
+    <div class="widget">
+      <img src="images/todo.png" alt="To-Do Icon" />
+      <h2>To-Do List</h2>
+      <p>Manage your tasks and goals</p>
+    </div>
 
-    <section id="notesSection" class="tabContent">
-      <h2>To Do List</h2>
-      <input id="noteInput" placeholder="Add a new task..." />
-      <button onclick="saveNote()">Add</button>
-      <ul id="noteList"></ul>
-    </section>
-
-    <section id="deadlinesSection" class="tabContent">
+    <!-- Deadlines -->
+    <div class="widget">
+      <img src="images/deadlines.png" alt="Deadlines Icon" />
       <h2>Deadlines</h2>
-      <form onsubmit="addDeadline(event)">
-        <input id="deadlineTitle" placeholder="Title" />
-        <input type="date" id="deadlineDate" />
-        <button type="submit">Add</button>
-      </form>
-      <ul id="deadlineList"></ul>
-    </section>
+      <p>Track important due dates</p>
+    </div>
 
-    <section id="importantSection" class="tabContent">
+    <!-- Quick Notes -->
+    <div class="widget">
+      <img src="images/notes.png" alt="Notes Icon" />
+      <h2>Quick Notes</h2>
+      <p>Save and review quick notes</p>
+    </div>
+
+    <!-- Important Info -->
+    <div class="widget">
+      <img src="images/info.png" alt="Info Icon" />
       <h2>Important Info</h2>
-      <form onsubmit="saveImportantInfo(event)">
-        <input id="infoLabel" placeholder="Label (e.g. Bank ID, TK Number)" required />
-        <input id="infoValue" placeholder="Value" required />
-        <button type="submit">Save</button>
-      </form>
-      <div id="importantPreview"></div>
-    </section>
+      <p>Access key documents and IDs</p>
+    </div>
 
-    <section id="resourcesSection" class="tabContent">
-      <h2>Helpful Links</h2>
-      <ul>
-        <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
-        <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
-      </ul>
-    </section>
+    <!-- Resources -->
+    <div class="widget">
+      <img src="images/resources.png" alt="Resources Icon" />
+      <h2>Resources</h2>
+      <p>Find helpful student links</p>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+
+  <script>
+    function loadUpcomingEvents() {
+      const eventsObj = JSON.parse(localStorage.getItem('calendarEvents') || '{}');
+
+      const now = new Date();
+      const upcoming = [];
+
+      Object.entries(eventsObj).forEach(([dateKey, dayEvents]) => {
+        dayEvents.forEach(event => {
+          const [year, month, day] = dateKey.split("-").map(Number);
+          const [hour, minute] = event.time.split(":").map(Number);
+          const date = new Date(year, month - 1, day, hour, minute);
+          if (date >= now) {
+            upcoming.push({...event, date});
+          }
+        });
+      });
+
+      upcoming.sort((a, b) => a.date - b.date);
+      const list = document.getElementById('calendarPreviewList');
+      list.innerHTML = upcoming.length
+        ? upcoming.slice(0, 5).map(e =>
+          `<li><strong>${e.title}</strong> – ${e.date.toLocaleString([], {dateStyle: 'short', timeStyle: 'short'})}</li>`
+        ).join('')
+        : '<li>No upcoming events</li>';
+    }
+
+    window.onload = loadUpcomingEvents;
+  </script>
+  <script>
+    let miniDate = new Date();
+
+    function renderMiniCalendar() {
+      const year = miniDate.getFullYear();
+      const month = miniDate.getMonth();
+      const grid = document.getElementById("miniCalendarGrid");
+      const title = document.getElementById("miniMonthYear");
+      title.textContent = miniDate.toLocaleDateString('default', {month: 'long', year: 'numeric'});
+
+      grid.innerHTML = "";
+
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDay = new Date(year, month, 1).getDay();
+      const today = new Date();
+
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dayNames.forEach(d => {
+        const div = document.createElement("div");
+        div.textContent = d;
+        div.className = "day-name";
+        grid.appendChild(div);
+      });
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement("div");
+        cell.className = "day-cell";
+        if (
+          d === today.getDate() &&
+          year === today.getFullYear() &&
+          month === today.getMonth()
+        ) {
+          cell.classList.add("today");
+        }
+        cell.textContent = d;
+        grid.appendChild(cell);
+      }
+    }
+
+    function changeMiniMonth(offset) {
+      miniDate.setMonth(miniDate.getMonth() + offset);
+      renderMiniCalendar();
+    }
+
+    renderMiniCalendar();
+  </script>
+  <script>
+    function loadTodaysEvents() {
+      const eventsObj = JSON.parse(localStorage.getItem("calendarEvents") || "{}");
+      const today = new Date();
+      const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+      const list = document.createElement('ul');
+
+      if (eventsObj[todayKey]) {
+        eventsObj[todayKey].forEach(ev => {
+          const li = document.createElement('li');
+          li.textContent = `${ev.time} - ${ev.title}`;
+          list.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.textContent = "No events today.";
+        list.appendChild(li);
+      }
+
+      document.querySelector('.calendar-widget').appendChild(list);
+    }
+
+    window.onload = loadTodaysEvents;
+  </script>
+
+
+
 </body>
 
 </html>

@@ -3,51 +3,59 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>UniVerse – Your Student Companion</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniVerse – Welcome</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      background-color: #f8f9fb;
-      color: #222;
-    }
-
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #d2eaf2;
-      padding: 60px 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #d2eaf2, #ffffff);
       text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 36px;
-      max-width: 700px;
-      margin-bottom: 20px;
       color: #0d2b46;
     }
 
-    .hero p {
-      font-size: 18px;
-      color: #333;
-      max-width: 600px;
-      margin-bottom: 30px;
-    }
-
-    .hero-buttons {
+    .hero {
+      padding: 60px 20px 40px;
+      background: url('images/world-map.png') no-repeat center top/cover;
       display: flex;
-      gap: 15px;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .hero-buttons button {
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
+    .logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 6vw;
+      max-width: 90%;
+      margin: 0 auto 30px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 90%;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 4vw;
+      font-weight: 600;
+      border-radius: 10px;
       border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .btn-primary {
@@ -56,137 +64,131 @@
     }
 
     .btn-secondary {
-      background-color: white;
-      color: #0d2b46;
-      border: 1px solid #ccc;
+      background-color: #4a90e2;
+      color: white;
     }
 
-    .features-section,
-    .about-section {
-      padding: 60px 20px;
-      max-width: 1000px;
-      margin: 0 auto;
+    .btn-yellow {
+      background-color: #ffe082;
     }
 
-    .feature-box {
+    .btn-teal {
+      background-color: #b2dfdb;
+    }
+
+    .btn-red {
+      background-color: #f8a5a5;
+    }
+
+    .icons-section {
+      margin-top: 40px;
       display: flex;
-      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      font-size: 8vw;
+    }
+
+    .calendar-preview {
+      margin-top: 30px;
       background: white;
-      padding: 20px;
-      margin: 20px 0;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+      width: 90%;
+      text-align: center;
     }
 
-    .feature-box img {
-      height: 50px;
-      margin-right: 20px;
+    .calendar-preview img {
+      width: 40px;
+      margin-bottom: 10px;
     }
 
-    .feature-box h3 {
-      margin: 0 0 8px;
-    }
-
-    .feature-box p {
+    .calendar-preview h3 {
       margin: 0;
-      color: #555;
     }
 
-    .about-section {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    .preview-text {
+      font-size: 14px;
+      color: #444;
+      margin-top: 5px;
     }
 
-    .about-section h2 {
-      font-size: 26px;
-      color: #0d2b46;
-    }
+    @media (min-width: 600px) {
+      h1 {
+        font-size: 36px;
+      }
 
-    .about-content {
-      display: flex;
-      gap: 30px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+      .btn {
+        font-size: 18px;
+      }
 
-    .about-content img {
-      width: 160px;
-      height: auto;
-      border-radius: 100px;
-      object-fit: cover;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .about-content p {
-      max-width: 600px;
-      line-height: 1.6;
-      font-size: 16px;
+      .icons-section {
+        font-size: 36px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- HERO SECTION -->
   <section class="hero">
-    <h1>Your guide surviving deadlines, visas & chaos as an international student</h1>
-    <p>Stay on top of your appointments, tasks, and resources — all in one place.</p>
-    <div class="hero-buttons">
-      <button class="btn-primary" onclick="location.href='dashboard.html'">Get Started</button>
-      <button class="btn-secondary"
-        onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' });">Explore Features</button>
+    <img src="images/universe-logo.png" alt="UniVerse Logo" class="logo">
+    <h1>Welcome!</h1>
+
+    <div class="buttons">
+      <button class="btn btn-primary" onclick="location.href='dashboard.html'">Get Started</button>
+      <button class="btn btn-secondary">Explore Features</button>
+      <button class="btn btn-yellow">About the Developer</button>
+      <button class="btn btn-teal">Student Chat</button>
+      <button class="btn btn-red">Make an Impact</button>
+    </div>
+
+    <!-- ✅ Calendar Preview Card -->
+    <div class="calendar-preview">
+      <img src="images/calendar-icon.png" alt="Calendar Icon">
+      <h3>Upcoming Event</h3>
+      <p id="calendarPreview" class="preview-text">Loading events...</p>
+    </div>
+
+    <div class="icons-section">
+      <span>📚</span>
+      <span>🌎</span>
     </div>
   </section>
 
-  <!-- FEATURES SECTION -->
-  <section id="features" class="features-section">
-    <div class="feature-box">
-      <img src="images/deadline.jpg" alt="Deadline Tracker">
-      <div>
-        <h3>Deadline Tracker</h3>
-        <p>Never miss an important date again.</p>
-      </div>
-    </div>
-    <div class="feature-box">
-      <img src="images/Visa.png" alt="Visa Assistant">
-      <div>
-        <h3>Visa Assistant</h3>
-        <p>Keep all your appointments and documents organized.</p>
-      </div>
-    </div>
-    <div class="feature-box">
-      <img src="images/support hub.jpg" alt="Support Hub">
-      <div>
-        <h3>Support Hub</h3>
-        <p>Find helpful resources and links in one click.</p>
-      </div>
-    </div>
-    <div class="feature-box">
-      <img src="images/settings.avif" alt="Custom Reminders">
-      <div>
-        <h3>Custom Reminders</h3>
-        <p>Your schedule, your way.</p>
-      </div>
-    </div>
-  </section>
+  <!-- ✅ JavaScript for Calendar Preview -->
+  <script>
+    function getUpcomingEvent() {
+      const events = JSON.parse(localStorage.getItem("calendarEvents")) || {};
+      let upcoming = [];
 
-  <!-- ABOUT SECTION -->
-  <section class="about-section">
-    <h2>About the Developer</h2>
-    <div class="about-content">
-      <img src="images/jana-profile.jpg" alt="Jana">
-      <p>
-        Hi, I’m Jana — a Computer Engineering student at TU Berlin with a passion for technology and helping
-        others.<br><br>
-        As an international student myself, I know how overwhelming it can be to manage deadlines, visa appointments,
-        and settle into a new country. That’s why I created this app — to make life a little easier for others going
-        through the same journey.<br><br>
-        When I’m not coding, I’m probably organizing something no one asked for, giving TED-style speeches to my mirror,
-        or convincing myself I have time for just one more side project.<br><br>
-        This project is part of my mission to blend tech with impact — and this is just the beginning.
-      </p>
-    </div>
-  </section>
+      const now = new Date();
+
+      Object.entries(events).forEach(([dateKey, dayEvents]) => {
+        dayEvents.forEach(event => {
+          const [year, month, day] = dateKey.split("-").map(Number);
+          const [hour, minute] = event.time.split(":").map(Number);
+          const eventDate = new Date(year, month - 1, day, hour, minute);
+          if (eventDate >= now) {
+            upcoming.push({...event, date: eventDate});
+          }
+        });
+      });
+
+      upcoming.sort((a, b) => a.date - b.date);
+
+      const preview = document.getElementById("calendarPreview");
+      if (upcoming.length > 0) {
+        const next = upcoming[0];
+        preview.innerText = `${next.date.toLocaleDateString()} at ${next.time} – ${next.title}`;
+      } else {
+        preview.innerText = "No upcoming events";
+      }
+    }
+
+    window.onload = getUpcomingEvent;
+  </script>
+
 </body>
 
 </html>

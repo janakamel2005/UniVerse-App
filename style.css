@@ -244,11 +244,14 @@ h2 {
 body {
   margin: 0;
   padding: 0;
-  display: flex;
+  background: linear-gradient(to bottom, #d2eaf2, #ffffff);
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9fb;
-  overflow-x: hidden;
+  color: #0d2b46;
+  text-align: center;
+  display: block;
+  /* undo flex if it’s inherited */
 }
+
 
 #mainContent {
   flex-grow: 1;
@@ -285,4 +288,252 @@ body.collapsed #sidebar {
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
+}
+
+.hero {
+  min-height: 100vh;
+  padding: 60px 20px;
+  background: url('images/world-map.png') no-repeat center top/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* This centers vertically */
+  text-align: center;
+}
+
+.hero .logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: 6vw;
+  max-width: 90%;
+  margin-bottom: 30px;
+  color: #0d2b46;
+}
+
+.hero .buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 90%;
+  max-width: 350px;
+  margin-bottom: 40px;
+}
+
+.hero .btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 4vw;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: #0d2b46;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.btn-yellow {
+  background-color: #ffe082;
+  color: #222;
+}
+
+.btn-teal {
+  background-color: #b2dfdb;
+  color: #222;
+}
+
+.btn-red {
+  background-color: #f8a5a5;
+  color: #222;
+}
+
+.hero .icons-section {
+  display: flex;
+  gap: 30px;
+  font-size: 8vw;
+  justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero .btn {
+    font-size: 18px;
+  }
+
+  .hero .icons-section {
+    font-size: 36px;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.modal-content li {
+  margin-bottom: 15px;
+  border-left: 4px solid #888;
+  padding-left: 10px;
+  position: relative;
+}
+
+.modal-content li[data-category="visa"] {
+  border-color: orange;
+}
+
+.modal-content li[data-category="uni"] {
+  border-color: blue;
+}
+
+.modal-content li[data-category="personal"] {
+  border-color: green;
+}
+
+.modal-content button {
+  background: transparent;
+  border: none;
+  color: red;
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  top: 0;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  margin: 10px;
+  transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.03);
+}
+
+.dashboard-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+}
+
+.preview-text {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 8px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.widget {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.mini-calendar {
+  max-width: 280px;
+  margin: auto;
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-grid div {
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.calendar-grid .day-name {
+  font-weight: bold;
+  background: #f2f2f2;
+}
+
+.calendar-grid .day-cell {
+  cursor: pointer;
+}
+
+.calendar-grid .day-cell.today {
+  background: #3f51b5;
+  color: white;
 }
