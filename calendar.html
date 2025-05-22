@@ -57,12 +57,19 @@
       text-align: center;
     }
 
-    .event {
+    .events-container {
       margin-top: 5px;
+      max-height: 60px;
+      overflow-y: auto;
+    }
+    
+    .event {
+      margin: 2px 0;
       padding: 2px 4px;
       border-radius: 4px;
       font-size: 0.8em;
       color: #fff;
+      word-break: break-word;
     }
 
     .modal {
@@ -184,7 +191,7 @@
     let events = loadEvents();
 
     function renderCalendar() {
-      events = loadEvents();
+      const currentEvents = loadEvents();
       const grid = document.getElementById("calendarGrid");
       while (grid.children.length > 7) {
         grid.removeChild(grid.lastChild);
@@ -205,8 +212,7 @@
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dateKey = getDateKey(year, month, day);
-        const currentEvents = loadEvents(); // Get fresh events data
-
+        
         const cell = document.createElement("div");
         cell.className = "calendar-cell";
         cell.onclick = () => openModal(dateKey);
@@ -215,14 +221,19 @@
         dateText.textContent = day;
         cell.appendChild(dateText);
 
-        if (currentEvents[dateKey]) {
+        if (currentEvents[dateKey] && currentEvents[dateKey].length > 0) {
+          const eventsContainer = document.createElement("div");
+          eventsContainer.className = "events-container";
+          
           currentEvents[dateKey].forEach(event => {
             const eventDiv = document.createElement("div");
             eventDiv.className = "event";
             eventDiv.style.backgroundColor = event.color;
             eventDiv.textContent = `${event.time} - ${event.title}`;
-            cell.appendChild(eventDiv);
+            eventsContainer.appendChild(eventDiv);
           });
+          
+          cell.appendChild(eventsContainer);
         }
 
         grid.appendChild(cell);
