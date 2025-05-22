@@ -262,11 +262,12 @@
 
       if (!title || !time) return alert("Please enter title and time.");
 
-      events = loadEvents(); // Refresh before save
-      if (!events[selectedDate]) events[selectedDate] = [];
-      events[selectedDate].push({title, time, location, color});
+      const currentEvents = JSON.parse(localStorage.getItem("calendarEvents") || "{}");
+      if (!currentEvents[selectedDate]) currentEvents[selectedDate] = [];
+      currentEvents[selectedDate].push({title, time, location, color});
 
-      localStorage.setItem("calendarEvents", JSON.stringify(events));
+      localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
+      events = currentEvents;
       closeModal();
       renderCalendar();
     }
