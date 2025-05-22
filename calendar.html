@@ -285,6 +285,7 @@
       if (!title || !time) return alert("Please enter title and time.");
 
       // Load fresh events
+      // Load fresh events
       const currentEvents = loadEvents();
       
       // Initialize array for this date if needed
@@ -298,6 +299,9 @@
       // Save to localStorage
       localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
 
+      // Update events variable to match localStorage
+      events = currentEvents;
+      
       // Close modal and update calendar
       closeModal();
       renderCalendar();
