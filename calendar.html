@@ -266,9 +266,23 @@
       if (!currentEvents[selectedDate]) currentEvents[selectedDate] = [];
       currentEvents[selectedDate].push({title, time, location, color});
 
+      // Update both localStorage and current events
       localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
       events = currentEvents;
-      closeModal();
+      
+      // Refresh the event list in modal
+      const eventList = document.getElementById("eventList");
+      const item = document.createElement("div");
+      item.className = "event-item";
+      item.style.borderColor = color;
+      item.innerHTML = `<strong>${time} - ${title}</strong><span>${location}</span>`;
+      eventList.appendChild(item);
+      
+      // Clear input fields
+      document.getElementById("eventTitle").value = "";
+      document.getElementById("eventTime").value = "";
+      document.getElementById("eventLocation").value = "";
+      
       renderCalendar();
     }
 
