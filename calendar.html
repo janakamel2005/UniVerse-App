@@ -205,6 +205,7 @@
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dateKey = getDateKey(year, month, day);
+        const currentEvents = loadEvents(); // Get fresh events data
 
         const cell = document.createElement("div");
         cell.className = "calendar-cell";
@@ -214,8 +215,8 @@
         dateText.textContent = day;
         cell.appendChild(dateText);
 
-        if (events[dateKey]) {
-          events[dateKey].forEach(event => {
+        if (currentEvents[dateKey]) {
+          currentEvents[dateKey].forEach(event => {
             const eventDiv = document.createElement("div");
             eventDiv.className = "event";
             eventDiv.style.backgroundColor = event.color;
