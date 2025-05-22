@@ -298,14 +298,8 @@
       // Save to localStorage
       localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
 
-      // Clear form
-      document.getElementById("eventTitle").value = "";
-      document.getElementById("eventTime").value = "";
-      document.getElementById("eventLocation").value = "";
-      document.getElementById("eventColor").value = "#3498db";
-
-      // Update displays
-      openModal(selectedDate);
+      // Close modal and update calendar
+      closeModal();
       renderCalendar();
     }
 
