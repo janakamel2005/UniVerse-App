@@ -14,25 +14,6 @@
       color: #222;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      background-color: white;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .topbar img {
-      height: 50px;
-    }
-
-    .topbar h1 {
-      font-size: 24px;
-      color: #3f51b5;
-      margin: 0;
-    }
-
     .dashboard {
       display: flex;
       flex-wrap: wrap;
@@ -69,26 +50,6 @@
     .widget p {
       font-size: 14px;
       color: #666;
-    }
-
-    .calendar-preview ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 12px;
-      text-align: left;
-    }
-
-    .calendar-preview li {
-      font-size: 14px;
-      color: #333;
-      padding: 4px 0;
-    }
-
-    @media (max-width: 768px) {
-      .dashboard {
-        flex-direction: column;
-        align-items: center;
-      }
     }
 
     .mini-calendar {
@@ -133,12 +94,39 @@
       background: #3f51b5;
       color: white;
     }
+
+    .today-events {
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .today-events h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #3f51b5;
+    }
+
+    .today-events ul {
+      list-style: none;
+      padding-left: 16px;
+      margin: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="dashboard">
-    <!-- Mini Calendar -->
+
+    <!-- 📆 Mini Calendar Widget -->
     <div class="widget calendar-widget" onclick="location.href='calendar.html'">
       <div class="mini-calendar">
         <div class="calendar-nav">
@@ -148,37 +136,39 @@
         </div>
         <div class="calendar-grid" id="miniCalendarGrid"></div>
       </div>
+
+      <!-- ✅ Today’s Events Preview -->
+      <div class="today-events">
+        <h3>Today’s Events</h3>
+        <ul id="todayEventsList"></ul>
+      </div>
     </div>
 
-    <!-- To-Do -->
+    <!-- 📝 Other Widgets -->
     <div class="widget">
       <img src="images/todo.png" alt="To-Do Icon" />
       <h2>To-Do List</h2>
       <p>Manage your tasks and goals</p>
     </div>
 
-    <!-- Deadlines -->
     <div class="widget">
       <img src="images/deadlines.png" alt="Deadlines Icon" />
       <h2>Deadlines</h2>
       <p>Track important due dates</p>
     </div>
 
-    <!-- Quick Notes -->
     <div class="widget">
       <img src="images/notes.png" alt="Notes Icon" />
       <h2>Quick Notes</h2>
       <p>Save and review quick notes</p>
     </div>
 
-    <!-- Important Info -->
     <div class="widget">
       <img src="images/info.png" alt="Info Icon" />
       <h2>Important Info</h2>
       <p>Access key documents and IDs</p>
     </div>
 
-    <!-- Resources -->
     <div class="widget">
       <img src="images/resources.png" alt="Resources Icon" />
       <h2>Resources</h2>
@@ -186,36 +176,6 @@
     </div>
   </div>
 
-
-  <script>
-    function loadUpcomingEvents() {
-      const eventsObj = JSON.parse(localStorage.getItem('calendarEvents') || '{}');
-
-      const now = new Date();
-      const upcoming = [];
-
-      Object.entries(eventsObj).forEach(([dateKey, dayEvents]) => {
-        dayEvents.forEach(event => {
-          const [year, month, day] = dateKey.split("-").map(Number);
-          const [hour, minute] = event.time.split(":").map(Number);
-          const date = new Date(year, month - 1, day, hour, minute);
-          if (date >= now) {
-            upcoming.push({...event, date});
-          }
-        });
-      });
-
-      upcoming.sort((a, b) => a.date - b.date);
-      const list = document.getElementById('calendarPreviewList');
-      list.innerHTML = upcoming.length
-        ? upcoming.slice(0, 5).map(e =>
-          `<li><strong>${e.title}</strong> – ${e.date.toLocaleString([], {dateStyle: 'short', timeStyle: 'short'})}</li>`
-        ).join('')
-        : '<li>No upcoming events</li>';
-    }
-
-    window.onload = loadUpcomingEvents;
-  </script>
   <script>
     let miniDate = new Date();
 
@@ -241,8 +201,7 @@
       });
 
       for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement("div");
-        grid.appendChild(empty);
+        grid.appendChild(document.createElement("div"));
       }
 
       for (let d = 1; d <= daysInMonth; d++) {
@@ -265,35 +224,33 @@
       renderMiniCalendar();
     }
 
-    renderMiniCalendar();
-  </script>
-  <script>
     function loadTodaysEvents() {
       const eventsObj = JSON.parse(localStorage.getItem("calendarEvents") || "{}");
       const today = new Date();
-      const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-      const list = document.createElement('ul');
+      const key = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const list = document.getElementById("todayEventsList");
+      if (!list) return;
 
-      if (eventsObj[todayKey]) {
-        eventsObj[todayKey].forEach(ev => {
-          const li = document.createElement('li');
-          li.textContent = `${ev.time} - ${ev.title}`;
+      list.innerHTML = "";
+
+      if (eventsObj[key] && eventsObj[key].length > 0) {
+        eventsObj[key].forEach(ev => {
+          const li = document.createElement("li");
+          li.textContent = `${ev.time} – ${ev.title}`;
           list.appendChild(li);
         });
       } else {
-        const li = document.createElement('li');
+        const li = document.createElement("li");
         li.textContent = "No events today.";
         list.appendChild(li);
       }
-
-      document.querySelector('.calendar-widget').appendChild(list);
     }
 
-    window.onload = loadTodaysEvents;
+    window.onload = () => {
+      renderMiniCalendar();
+      loadTodaysEvents();
+    };
   </script>
-
-
-
 </body>
 
 </html>

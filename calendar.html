@@ -62,7 +62,7 @@
       max-height: 60px;
       overflow-y: auto;
     }
-    
+
     .event {
       margin: 2px 0;
       padding: 2px 4px;
@@ -133,7 +133,6 @@
 
 <body>
   <h1>Full Calendar View</h1>
-
   <div class="calendar-header">
     <button onclick="changeMonth(-1)">← Prev</button>
     <h2 id="monthYear">Month Year</h2>
@@ -154,9 +153,7 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal()">×</span>
       <h3 id="modalDateHeading">Add Event</h3>
-
       <div class="event-list" id="eventList"></div>
-
       <input type="text" id="eventTitle" placeholder="Event title" />
       <input type="time" id="eventTime" />
       <input type="text" id="eventLocation" placeholder="Location" />
@@ -175,44 +172,31 @@
     let currentDate = new Date();
     let selectedDate = null;
 
-    function pad(num) {
-      return String(num).padStart(2, '0');
-    }
-
-    function getDateKey(year, month, day) {
-      return `${year}-${pad(month)}-${pad(day)}`;
-    }
-
-    function loadEvents() {
-      const stored = localStorage.getItem("calendarEvents");
-      return stored ? JSON.parse(stored) : {};
-    }
-
-    let events = loadEvents();
+    const pad = num => String(num).padStart(2, '0');
+    const getDateKey = (y, m, d) => `${y}-${pad(m)}-${pad(d)}`;
+    const loadEvents = () => JSON.parse(localStorage.getItem("calendarEvents") || "{}");
 
     function renderCalendar() {
-      const currentEvents = loadEvents();
+      const events = loadEvents();
       const grid = document.getElementById("calendarGrid");
-      while (grid.children.length > 7) {
-        grid.removeChild(grid.lastChild);
-      }
+      while (grid.children.length > 7) grid.removeChild(grid.lastChild);
 
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth() + 1;
+      const rawMonth = currentDate.getMonth();
+      const month = rawMonth + 1;
       document.getElementById("monthYear").textContent = currentDate.toLocaleDateString('default', {month: 'long', year: 'numeric'});
 
-      const firstDay = new Date(year, month - 1, 1).getDay();
+      const firstDay = new Date(year, rawMonth, 1).getDay();
       const daysInMonth = new Date(year, month, 0).getDate();
 
       for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement("div");
-        emptyCell.className = "calendar-cell";
-        grid.appendChild(emptyCell);
+        const empty = document.createElement("div");
+        empty.className = "calendar-cell";
+        grid.appendChild(empty);
       }
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dateKey = getDateKey(year, month, day);
-        
         const cell = document.createElement("div");
         cell.className = "calendar-cell";
         cell.onclick = () => openModal(dateKey);
@@ -221,35 +205,28 @@
         dateText.textContent = day;
         cell.appendChild(dateText);
 
-        if (currentEvents[dateKey] && currentEvents[dateKey].length > 0) {
-          const eventsContainer = document.createElement("div");
-          eventsContainer.className = "events-container";
-          
-          currentEvents[dateKey].forEach(event => {
-            const eventDiv = document.createElement("div");
-            eventDiv.className = "event";
-            eventDiv.style.backgroundColor = event.color;
-            eventDiv.textContent = `${event.time} - ${event.title}`;
-            eventsContainer.appendChild(eventDiv);
+        if (events[dateKey]) {
+          const container = document.createElement("div");
+          container.className = "events-container";
+          events[dateKey].forEach(ev => {
+            const e = document.createElement("div");
+            e.className = "event";
+            e.style.backgroundColor = ev.color;
+            e.textContent = `${ev.time} - ${ev.title}`;
+            container.appendChild(e);
           });
-          
-          cell.appendChild(eventsContainer);
+          cell.appendChild(container);
         }
 
         grid.appendChild(cell);
       }
     }
 
-    function changeMonth(offset) {
-      currentDate.setMonth(currentDate.getMonth() + offset);
-      renderCalendar();
-    }
-
     function openModal(dateKey) {
       selectedDate = dateKey;
-      const currentEvents = loadEvents(); // Get fresh data
-      const eventList = document.getElementById("eventList");
-      eventList.innerHTML = "";
+      const events = loadEvents();
+      const list = document.getElementById("eventList");
+      list.innerHTML = "";
 
       document.getElementById("modalDateHeading").textContent = `Events on ${selectedDate}`;
       document.getElementById("eventTitle").value = "";
@@ -257,20 +234,18 @@
       document.getElementById("eventLocation").value = "";
       document.getElementById("eventColor").value = "#3498db";
 
-      // Display existing events for this date
-      if (currentEvents[dateKey] && currentEvents[dateKey].length > 0) {
-        currentEvents[dateKey].forEach(event => {
+      if (events[selectedDate]) {
+        events[selectedDate].forEach(ev => {
           const item = document.createElement("div");
           item.className = "event-item";
-          item.style.borderColor = event.color;
-          item.innerHTML = `<strong>${event.time} - ${event.title}</strong><span>${event.location}</span>`;
-          eventList.appendChild(item);
+          item.style.borderColor = ev.color;
+          item.innerHTML = `<strong>${ev.time} - ${ev.title}</strong><span>${ev.location}</span>`;
+          list.appendChild(item);
         });
       }
 
       document.getElementById("eventModal").style.display = "flex";
     }
-
 
     function closeModal() {
       document.getElementById("eventModal").style.display = "none";
@@ -281,35 +256,28 @@
       const time = document.getElementById("eventTime").value;
       const location = document.getElementById("eventLocation").value;
       const color = document.getElementById("eventColor").value;
+      if (!title || !time || !selectedDate) return alert("Please fill all fields.");
 
-      if (!title || !time) return alert("Please enter title and time.");
+      const events = loadEvents();
+      if (!events[selectedDate]) events[selectedDate] = [];
+      events[selectedDate].push({title, time, location, color});
 
-      // Load fresh events
-      // Load fresh events
-      const currentEvents = loadEvents();
-      
-      // Initialize array for this date if needed
-      if (!currentEvents[selectedDate]) {
-        currentEvents[selectedDate] = [];
-      }
-      
-      // Add new event
-      currentEvents[selectedDate].push({title, time, location, color});
-      
-      // Save to localStorage
-      localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
-
-      // Update events variable to match localStorage
-      events = currentEvents;
-      
-      // Close modal and update calendar
+      localStorage.setItem("calendarEvents", JSON.stringify(events));
       closeModal();
       renderCalendar();
     }
 
+    function changeMonth(offset) {
+      currentDate.setMonth(currentDate.getMonth() + offset);
+      renderCalendar();
+    }
+
+    window.onclick = e => {
+      if (e.target === document.getElementById("eventModal")) closeModal();
+    };
+
     renderCalendar();
   </script>
-
 </body>
 
 </html>
