@@ -284,27 +284,19 @@
 
       if (!title || !time) return alert("Please enter title and time.");
 
-      // Load current events
-      events = loadEvents();
+      // Load fresh events
+      const currentEvents = loadEvents();
       
       // Initialize array for this date if needed
-      if (!events[selectedDate]) {
-        events[selectedDate] = [];
+      if (!currentEvents[selectedDate]) {
+        currentEvents[selectedDate] = [];
       }
       
       // Add new event
-      events[selectedDate].push({title, time, location, color});
+      currentEvents[selectedDate].push({title, time, location, color});
       
       // Save to localStorage
-      localStorage.setItem("calendarEvents", JSON.stringify(events));
-
-      // Add to current display
-      const eventList = document.getElementById("eventList");
-      const item = document.createElement("div");
-      item.className = "event-item";
-      item.style.borderColor = color;
-      item.innerHTML = `<strong>${time} - ${title}</strong><span>${location}</span>`;
-      eventList.appendChild(item);
+      localStorage.setItem("calendarEvents", JSON.stringify(currentEvents));
 
       // Clear form
       document.getElementById("eventTitle").value = "";
@@ -312,6 +304,8 @@
       document.getElementById("eventLocation").value = "";
       document.getElementById("eventColor").value = "#3498db";
 
+      // Update displays
+      openModal(selectedDate);
       renderCalendar();
     }
 
