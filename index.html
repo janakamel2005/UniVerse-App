@@ -6,340 +6,121 @@
   <title>UniVerse – Your Student Companion</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* --- GENERAL RESET --- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    .hero {
+      background: #dff1f5 url('images/world-map.png') center/cover no-repeat;
+      padding: 100px 20px;
+      text-align: center;
+      color: #00324e;
     }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f5f7fc;
-      color: #222;
-      overflow-x: hidden;
+    .hero h1 {
+      font-size: 36px;
+      font-weight: bold;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .hero-buttons {
       display: flex;
+      justify-content: center;
+      gap: 20px;
     }
 
-    /* --- TOPBAR --- */
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 200px;
-      right: 0;
-      height: 60px;
-      background-color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 24px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-      z-index: 999;
-    }
-
-    .app-logo {
-      height: 38px;
-    }
-
-    .app-title {
-      font-size: 22px;
-      font-weight: 600;
-      color: #3f51b5;
-    }
-
-    /* --- SIDEBAR --- */
-    #sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 100vh;
-      background-color: #e6f0fa;
-      padding-top: 60px;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
-      z-index: 1000;
-    }
-
-    #sidebarContent {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding: 15px;
-    }
-
-    #sidebarContent button {
-      background: #ffffff;
-      border: none;
-      padding: 12px;
+    .hero-buttons a {
+      padding: 12px 24px;
       border-radius: 6px;
-      font-size: 16px;
-      text-align: left;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    #sidebarContent button:hover {
-      background-color: #d8eaff;
+    .btn-primary {
+      background-color: #00324e;
+      color: #fff;
     }
 
-    #toggleSidebar {
-      position: absolute;
-      top: 12px;
-      right: -36px;
-      background: #d8eaff;
-      border: none;
-      padding: 8px;
-      border-radius: 0 6px 6px 0;
-      cursor: pointer;
+    .btn-secondary {
+      background-color: #e6f0fa;
+      color: #00324e;
+      border: 1px solid #ccc;
     }
 
-    /* --- MAIN CONTENT --- */
-    #mainContent {
-      margin-left: 200px;
-      padding: 80px 30px 40px;
-      flex-grow: 1;
-      min-height: 100vh;
-    }
-
-    .homepage {
-      max-width: 1100px;
+    #featuresSection {
+      padding: 60px 20px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
-    .homepage h2 {
-      margin-bottom: 10px;
-      color: #222;
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
     }
 
-    .homepage p {
-      font-size: 16px;
-      color: #555;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    /* --- SLIDESHOW --- */
-    .slideshow-container {
-      max-width: 1000px;
-      margin: 30px auto;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .slide {
-      display: none;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0.5;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .fade {
-      animation: fade 1s ease-in-out;
-    }
-
-    /* --- HIGHLIGHT BOXES --- */
-    .highlight-box {
+    .feature {
       background: #fff;
-      border-left: 5px solid #ff9aa2;
+      border-radius: 8px;
       padding: 20px;
-      margin: 20px 0;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      text-align: center;
     }
 
-    .highlight-box h3 {
-      margin-bottom: 10px;
-      color: #333;
+    .feature h3 {
+      margin-top: 10px;
+      font-size: 18px;
     }
 
-    .highlight-box ul {
-      padding-left: 20px;
-    }
-
-    .highlight-box ul li {
-      margin-bottom: 8px;
-    }
-
-    /* --- RESPONSIVE LOGO FIX --- */
-    @media (max-width: 768px) {
-      .topbar {
-        left: 0;
-        justify-content: center;
-      }
-
-      #mainContent {
-        margin-left: 0;
-      }
-
-      #sidebar {
-        transform: translateX(-200px);
-      }
-
-      body.collapsed #sidebar {
-        transform: translateX(0);
-      }
+    .feature p {
+      font-size: 14px;
+      color: #555;
     }
   </style>
 </head>
 
 <body>
-
-  <!-- SIDEBAR -->
-  <div id="sidebar">
-    <button id="toggleSidebar" onclick="toggleSidebar()">☰</button>
-    <div id="sidebarContent">
-      <button onclick="showSection('dashboard'); showDashboardTab('notes')">📝 Notes</button>
-      <button onclick="showSection('dashboard'); showDashboardTab('deadlines')">⏰ Deadlines</button>
-      <button onclick="showSection('dashboard'); showDashboardTab('resources')">🌐 Resources</button>
-      <button onclick="showSection('dashboard'); showDashboardTab('important')">🔒 Important Info</button>
-      <button onclick="showSection('home')">🏠 Home</button>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Your guide surviving deadlines, visas & chaos as an international student</h1>
+    <p>Stay on top of your appointments, tasks, and resources — all in one place.</p>
+    <div class="hero-buttons">
+      <a href="dashboard.html" class="btn-primary">Get Started</a>
+      <a href="#featuresSection" class="btn-secondary">Explore Features</a>
     </div>
-  </div>
+  </section>
 
-
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <img src="images/universe-logo.png" alt="UniVerse Logo" class="app-logo-large">
-  </header>
-
-
-  <!-- MAIN CONTENT -->
-  <div id="mainContent">
-    <section id="homeSection" class="homepage">
-
-      <div class="welcome" style="text-align: center;">
-        <h2>Welcome to UniVerse 🌍</h2>
-        <p>Your companion for surviving and thriving as an international student.</p>
+  <!-- FEATURES SECTION -->
+  <section id="featuresSection">
+    <h2 style="text-align:center; margin-bottom: 20px;">Features</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div style="font-size: 30px;">📅</div>
+        <h3>Deadline Tracker</h3>
+        <p>Never miss an important date again.</p>
       </div>
-
-      <!-- Slideshow -->
-      <div class="slideshow-container">
-        <div class="slide fade">
-          <img src="images/students1.jpg" alt="Berlin city life" />
-        </div>
-        <div class="slide fade">
-          <img src="images/students2.jpg" alt="Students working together" />
-        </div>
-        <div class="slide fade">
-          <img src="images/students3.jpg" alt="TU Berlin library" />
-        </div>
+      <div class="feature">
+        <div style="font-size: 30px;">📄</div>
+        <h3>Visa Assistant</h3>
+        <p>Keep all your appointments and documents organized.</p>
       </div>
-
-      <!-- What is Universe -->
-      <section class="highlight-box">
-        <h3>🌟 What is UniVerse?</h3>
-        <p>UniVerse is your personal student sidekick — designed to help you keep track of everything from important
-          deadlines and personal documents to helpful resources and housing links. Whether you're figuring out your
-          next visa appointment or just need a place to drop your CV and TK ID number, UniVerse has your back.</p>
-      </section>
-
-      <!-- Video -->
-      <div class="video-wrapper" style="text-align: center;">
-        <video width="100%" controls style="max-width: 600px; border-radius: 10px;">
-          <source src="welcome-video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+      <div class="feature">
+        <div style="font-size: 30px;">🧭</div>
+        <h3>Support Hub</h3>
+        <p>Find helpful resources and links in one click.</p>
       </div>
-
-      <!-- About the Developer -->
-      <section class="highlight-box" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
-        <img src="images/jana-profile.jpg" alt="Jana profile"
-          style="width: 120px; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
-        <div style="flex: 1;">
-          <h3>👩‍💻 About the Developer</h3>
-          <p>Hi, I’m Jana — a Computer Engineering student at TU Berlin with a passion for technology and helping
-            others.</p>
-          <p>As an international student myself, I know how overwhelming it can be to manage deadlines, visa
-            appointments, and settle into a new country. That’s why I created this app — to make life a little easier
-            for others going through the same journey.</p>
-          <p>When I’m not coding, I’m probably organizing something no one asked for, giving TED-style speeches to
-            my mirror, or convincing myself I have time for just one more side project.</p>
-        </div>
-      </section>
-
-      <!-- Features -->
-      <section class="highlight-box">
-        <h3>🧭 What You Can Do</h3>
-        <ul>
-          <li>📝 Save quick notes instantly</li>
-          <li>⏰ Track deadlines with 7- and 2-day reminders</li>
-          <li>🔒 Store your Sozialversicherungsnummer, TK ID, etc.</li>
-          <li>📎 Upload and view important PDFs like visa papers and CVs</li>
-          <li>🌐 Access student-friendly links for housing, jobs, and more</li>
-        </ul>
-      </section>
-    </section>
-
-    <section id="dashboardSection" style="display: none;">
-      <div id="notesSection" class="tabContent">
-        <h2>Quick Notes</h2>
-        <input id="noteInput" placeholder="Write a note..." />
-        <button onclick="saveNote()">Save</button>
-        <ul id="noteList"></ul>
+      <div class="feature">
+        <div style="font-size: 30px;">⏰</div>
+        <h3>Custom Reminders</h3>
+        <p>Your schedule, your way.</p>
       </div>
-
-      <div id="deadlinesSection" class="tabContent" style="display: none;">
-        <h2>Deadlines</h2>
-        <form onsubmit="addDeadline(event)">
-          <input id="deadlineTitle" placeholder="Title" />
-          <input type="date" id="deadlineDate" />
-          <button type="submit">Add</button>
-        </form>
-        <ul id="deadlineList"></ul>
-      </div>
-
-      <div id="resourcesSection" class="tabContent" style="display: none;">
-        <h2>Helpful Links</h2>
-        <ul>
-          <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
-          <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
-        </ul>
-      </div>
-
-      <div id="importantSection" class="tabContent" style="display: none;">
-        <h2>Important Info</h2>
-        <form onsubmit="saveImportantInfo(event)">
-          <input id="tkId" placeholder="TK ID" />
-          <input id="socialId" placeholder="Sozialversicherungsnummer" />
-          <input id="otherInfo" placeholder="Other Info" />
-          <button type="submit">Save</button>
-        </form>
-        <div id="importantPreview"></div>
-      </div>
-    </section>
-  </div>
-
-  <script src="script.js"></script>
-  <script>
-    let slideIndex = 0;
-    showSlides();
-    function showSlides() {
-      let slides = document.getElementsByClassName("slide");
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) {slideIndex = 1;}
-      slides[slideIndex - 1].style.display = "block";
-      setTimeout(showSlides, 3500);
-    }
-  </script>
-
+    </div>
+  </section>
 </body>
 
 </html>

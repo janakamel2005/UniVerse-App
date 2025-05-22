@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniVerse Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f8f9fb;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .topbar {
+      background-color: #f4f7fc;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .app-logo-large {
+      height: 50px;
+    }
+
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2a2a2a;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .dashboard-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      flex: 1 1 45%;
+      min-width: 300px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      padding: 20px 25px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-icon {
+      font-size: 34px;
+    }
+
+    .card-content h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: #1f1f1f;
+    }
+
+    .card-content p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .tabContent {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+      padding: 20px;
+      display: none;
+    }
+
+    .tabContent h2 {
+      margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 18px;
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <img src="images/universe-logo.png" alt="UniVerse Logo" class="app-logo-large">
+    <h1 class="app-title">Welcome, Jana!</h1>
+  </header>
+
+  <div class="container">
+    <main class="dashboard-row">
+      <div class="dashboard-card" onclick="showDashboardTab('notes')">
+        <div class="card-icon">✅</div>
+        <div class="card-content">
+          <h3>To Do List</h3>
+          <p>Write and save tasks instantly</p>
+        </div>
+      </div>
+      <div class="dashboard-card" onclick="showDashboardTab('deadlines')">
+        <div class="card-icon">📅</div>
+        <div class="card-content">
+          <h3>Deadlines</h3>
+          <p>Track important due dates</p>
+        </div>
+      </div>
+      <div class="dashboard-card" onclick="showDashboardTab('important')">
+        <div class="card-icon">📌</div>
+        <div class="card-content">
+          <h3>Important Info</h3>
+          <p>Save key numbers and IDs</p>
+        </div>
+      </div>
+      <div class="dashboard-card" onclick="showDashboardTab('resources')">
+        <div class="card-icon">🌐</div>
+        <div class="card-content">
+          <h3>Resources</h3>
+          <p>Find helpful student links</p>
+        </div>
+      </div>
+    </main>
+
+    <section id="notesSection" class="tabContent">
+      <h2>To Do List</h2>
+      <input id="noteInput" placeholder="Add a new task..." />
+      <button onclick="saveNote()">Add</button>
+      <ul id="noteList"></ul>
+    </section>
+
+    <section id="deadlinesSection" class="tabContent">
+      <h2>Deadlines</h2>
+      <form onsubmit="addDeadline(event)">
+        <input id="deadlineTitle" placeholder="Title" />
+        <input type="date" id="deadlineDate" />
+        <button type="submit">Add</button>
+      </form>
+      <ul id="deadlineList"></ul>
+    </section>
+
+    <section id="importantSection" class="tabContent">
+      <h2>Important Info</h2>
+      <form onsubmit="saveImportantInfo(event)">
+        <input id="tkId" placeholder="TK ID" />
+        <input id="socialId" placeholder="Sozialversicherungsnummer" />
+        <input id="otherInfo" placeholder="Other Info" />
+        <button type="submit">Save</button>
+      </form>
+      <div id="importantPreview"></div>
+    </section>
+
+    <section id="resourcesSection" class="tabContent">
+      <h2>Helpful Links</h2>
+      <ul>
+        <li><a href="https://www.stw.berlin/en/" target="_blank">Studentenwerk Berlin</a></li>
+        <li><a href="https://jobportal.berlin/" target="_blank">Berlin Job Portal</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
