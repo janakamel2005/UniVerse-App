@@ -135,49 +135,58 @@ function showDashboardTab(tab) {
 
 function saveImportantInfo(event) {
   event.preventDefault();
-  
-  const labelInput = document.getElementById("infoLabel").value.trim();
-  const valueInput = document.getElementById("infoValue").value.trim();
-  
-  if (labelInput && valueInput) {
-    let savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
-    savedInfo.push({ label: labelInput, value: valueInput });
-    localStorage.setItem("importantInfo", JSON.stringify(savedInfo));
-    
-    // Clear inputs
-    document.getElementById("infoLabel").value = "";
-    document.getElementById("infoValue").value = "";
-    
-    showImportantInfo();
-  }
+
+  const label = document.getElementById("infoLabel").value.trim();
+  const value = document.getElementById("infoValue").value.trim();
+
+  if (!label || !value) return;
+
+  let data = JSON.parse(localStorage.getItem("infoItems")) || {};
+  data[label] = value;
+  localStorage.setItem("infoItems", JSON.stringify(data));
+
+  document.getElementById("infoLabel").value = "";
+  document.getElementById("infoValue").value = "";
+  showImportantInfo();
 }
+
+function showImportantInfo() {
+  const data = JSON.parse(localStorage.getItem("infoItems")) || {};
+  const preview = document.getElementById("importantPreview");
+
+  if (Object.keys(data).length === 0) {
+    preview.innerHTML = "<em>No info saved yet.</em>";
+    return;
+  }
+
+  let html = "<strong>Saved Info:</strong><br><ul>";
+  for (const [label, value] of Object.entries(data)) {
+    html += `
+      <li>
+        <strong>${label}:</strong> ${value}
+        <button onclick="deleteInfoItem('${label}')" style="margin-left: 10px;">🗑</button>
+      </li>
+    `;
+  }
+  html += "</ul>";
+
+  preview.innerHTML = html;
+}
+
+function deleteInfoItem(label) {
+  let data = JSON.parse(localStorage.getItem("infoItems")) || {};
+  delete data[label];
+  localStorage.setItem("infoItems", JSON.stringify(data));
+  showImportantInfo();
+}
+
+
 
 function deleteInfo(index) {
   let savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
   savedInfo.splice(index, 1);
   localStorage.setItem("importantInfo", JSON.stringify(savedInfo));
   showImportantInfo();
-}
-
-function showImportantInfo() {
-  const preview = document.getElementById("importantPreview");
-  const savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
-
-  if (savedInfo.length > 0) {
-    let html = '<div class="saved-info-list">';
-    savedInfo.forEach((info, index) => {
-      html += `
-        <div class="info-item">
-          <strong>${info.label}:</strong> ${info.value}
-          <button onclick="deleteInfo(${index})" class="delete-btn">🗑️</button>
-        </div>
-      `;
-    });
-    html += '</div>';
-    preview.innerHTML = html;
-  } else {
-    preview.innerHTML = "<em>No info saved yet.</em>";
-  }
 }
 
 // Initialize everything
