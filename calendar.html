@@ -168,7 +168,14 @@
     let currentDate = new Date();
     let selectedDate = null;
 
-    // Always re-load from storage (this prevents overwriting)
+    function pad(num) {
+      return String(num).padStart(2, '0');
+    }
+
+    function getDateKey(year, month, day) {
+      return `${year}-${pad(month)}-${pad(day)}`;
+    }
+
     function loadEvents() {
       const stored = localStorage.getItem("calendarEvents");
       return stored ? JSON.parse(stored) : {};
@@ -177,19 +184,18 @@
     let events = loadEvents();
 
     function renderCalendar() {
-      // Load fresh events data
-      events = JSON.parse(localStorage.getItem("calendarEvents") || "{}");
+      events = loadEvents();
       const grid = document.getElementById("calendarGrid");
       while (grid.children.length > 7) {
         grid.removeChild(grid.lastChild);
       }
 
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
+      const month = currentDate.getMonth() + 1;
       document.getElementById("monthYear").textContent = currentDate.toLocaleDateString('default', {month: 'long', year: 'numeric'});
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDay = new Date(year, month - 1, 1).getDay();
+      const daysInMonth = new Date(year, month, 0).getDate();
 
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
@@ -198,7 +204,8 @@
       }
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const dateKey = `${year}-${month + 1}-${day}`;
+        const dateKey = getDateKey(year, month, day);
+
         const cell = document.createElement("div");
         cell.className = "calendar-cell";
         cell.onclick = () => openModal(dateKey);
@@ -251,6 +258,7 @@
       document.getElementById("eventModal").style.display = "flex";
     }
 
+
     function closeModal() {
       document.getElementById("eventModal").style.display = "none";
     }
@@ -263,42 +271,25 @@
 
       if (!title || !time) return alert("Please enter title and time.");
 
-      // Load fresh events from storage
-      events = loadEvents();
-      
-      // Initialize if needed
-      if (!events[selectedDate]) {
-        events[selectedDate] = [];
-      }
-      
-      // Add new event
-      const newEvent = {title, time, location, color};
-      events[selectedDate].push(newEvent);
-      
-      // Save to localStorage
-      localStorage.setItem("calendarEvents", JSON.stringify(events));
-      
-      // Clear input fields
+      const stored = localStorage.getItem("calendarEvents");
+      const allEvents = stored ? JSON.parse(stored) : {};
+
+      console.log("Saving for date:", selectedDate);
+
+      if (!allEvents[selectedDate]) allEvents[selectedDate] = [];
+
+      allEvents[selectedDate].push({title, time, location, color});
+
+      localStorage.setItem("calendarEvents", JSON.stringify(allEvents));
+
       document.getElementById("eventTitle").value = "";
       document.getElementById("eventTime").value = "";
       document.getElementById("eventLocation").value = "";
       document.getElementById("eventColor").value = "#3498db";
-      
-      // Update the event list in modal
-      const eventList = document.getElementById("eventList");
-      const item = document.createElement("div");
-      item.className = "event-item";
-      item.style.borderColor = color;
-      item.innerHTML = `<strong>${time} - ${title}</strong><span>${location}</span>`;
-      eventList.appendChild(item);
-      
-      // Refresh calendar display
+
+      closeModal();
       renderCalendar();
     }
-
-    window.onclick = (e) => {
-      if (e.target === document.getElementById("eventModal")) closeModal();
-    };
 
     renderCalendar();
   </script>
