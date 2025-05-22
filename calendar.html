@@ -235,7 +235,7 @@
 
     function openModal(dateKey) {
       selectedDate = dateKey;
-      events = loadEvents(); // Get fresh data
+      const currentEvents = loadEvents(); // Get fresh data
       const eventList = document.getElementById("eventList");
       eventList.innerHTML = "";
 
@@ -245,8 +245,9 @@
       document.getElementById("eventLocation").value = "";
       document.getElementById("eventColor").value = "#3498db";
 
-      if (events[dateKey]) {
-        events[dateKey].forEach(event => {
+      // Display existing events for this date
+      if (currentEvents[dateKey] && currentEvents[dateKey].length > 0) {
+        currentEvents[dateKey].forEach(event => {
           const item = document.createElement("div");
           item.className = "event-item";
           item.style.borderColor = event.color;
