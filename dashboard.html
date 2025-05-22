@@ -175,9 +175,8 @@
     <section id="importantSection" class="tabContent">
       <h2>Important Info</h2>
       <form onsubmit="saveImportantInfo(event)">
-        <input id="tkId" placeholder="TK ID" />
-        <input id="socialId" placeholder="Sozialversicherungsnummer" />
-        <input id="otherInfo" placeholder="Other Info" />
+        <input id="infoLabel" placeholder="Label (e.g. Bank ID, TK Number)" required />
+        <input id="infoValue" placeholder="Value" required />
         <button type="submit">Save</button>
       </form>
       <div id="importantPreview"></div>

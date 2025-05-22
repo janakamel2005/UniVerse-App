@@ -135,28 +135,46 @@ function showDashboardTab(tab) {
 
 function saveImportantInfo(event) {
   event.preventDefault();
+  
+  const labelInput = document.getElementById("infoLabel").value.trim();
+  const valueInput = document.getElementById("infoValue").value.trim();
+  
+  if (labelInput && valueInput) {
+    let savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
+    savedInfo.push({ label: labelInput, value: valueInput });
+    localStorage.setItem("importantInfo", JSON.stringify(savedInfo));
+    
+    // Clear inputs
+    document.getElementById("infoLabel").value = "";
+    document.getElementById("infoValue").value = "";
+    
+    showImportantInfo();
+  }
+}
 
-  const tkId = document.getElementById("tkId").value.trim();
-  const socialId = document.getElementById("socialId").value.trim();
-  const other = document.getElementById("otherInfo").value.trim();
-
-  const info = { tkId, socialId, other };
-  localStorage.setItem("importantInfo", JSON.stringify(info));
-
+function deleteInfo(index) {
+  let savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
+  savedInfo.splice(index, 1);
+  localStorage.setItem("importantInfo", JSON.stringify(savedInfo));
   showImportantInfo();
 }
 
 function showImportantInfo() {
   const preview = document.getElementById("importantPreview");
-  const info = JSON.parse(localStorage.getItem("importantInfo"));
+  const savedInfo = JSON.parse(localStorage.getItem("importantInfo")) || [];
 
-  if (info) {
-    preview.innerHTML = `
-      <strong>Saved Info:</strong><br>
-      TK ID: ${info.tkId || "-"}<br>
-      Sozialversicherungsnummer: ${info.socialId || "-"}<br>
-      Other: ${info.other || "-"}
-    `;
+  if (savedInfo.length > 0) {
+    let html = '<div class="saved-info-list">';
+    savedInfo.forEach((info, index) => {
+      html += `
+        <div class="info-item">
+          <strong>${info.label}:</strong> ${info.value}
+          <button onclick="deleteInfo(${index})" class="delete-btn">🗑️</button>
+        </div>
+      `;
+    });
+    html += '</div>';
+    preview.innerHTML = html;
   } else {
     preview.innerHTML = "<em>No info saved yet.</em>";
   }

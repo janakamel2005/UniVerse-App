@@ -184,6 +184,30 @@ h2 {
   line-height: 1.6;
 }
 
+.saved-info-list {
+  margin-top: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.delete-btn:hover {
+  opacity: 0.7;
+}
+
 /* Image gallery */
 .image-gallery {
   display: flex;
