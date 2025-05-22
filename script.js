@@ -185,5 +185,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDeadlines();
   renderNotes();
   showImportantInfo();
-  showSection('home'); // Start with home section
+  showDashboardTab('notes'); // Show notes tab by default
 });
