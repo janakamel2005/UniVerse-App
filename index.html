@@ -324,6 +324,7 @@
     </section>
   </div>
 
+  <script src="script.js"></script>
   <script>
     let slideIndex = 0;
     showSlides();
@@ -336,10 +337,6 @@
       if (slideIndex > slides.length) {slideIndex = 1;}
       slides[slideIndex - 1].style.display = "block";
       setTimeout(showSlides, 3500);
-    }
-
-    function toggleSidebar() {
-      document.body.classList.toggle("collapsed");
     }
   </script>
 
